@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import plotly.express as px
 
 # ChatGPT: https://chat.openai.com/share/5d3a8f51-4edd-411a-9c62-e153c7f2d673
 
@@ -46,7 +47,7 @@ def agg_answers():
     df.loc[16, "cat"] = "体制など"
     df = df.ffill()
     score = df["ans"].sum()
-    dfg = df.groupby("cat").sum()
+    dfg = df.groupby("cat", as_index=False).sum()
     dfg["ans_str"] = dfg["ans"].map(lambda x: f"{x} / 4")
     return df, score, dfg
 
@@ -73,14 +74,32 @@ def situation_check(score):
         )
 
 
+def show_chart(df):
+    fig = px.line_polar(df, r='ans', theta='cat', line_close=True)
+    fig.update_traces(fill='toself')
+    fig.update_layout(
+        polar={
+            'radialaxis': {
+                'visible': True,
+                'range': [0, 4],
+                'color': 'black'
+            }
+        }
+    )
+    st.plotly_chart(fig)
+
 def display_results():
+    st.header('BCP取り組み状況チェック', divider='rainbow')
+    st.write('中小企業庁: BCP取り組み状況チェックより作成')
+    st.write('https://www.chusho.meti.go.jp/bcp/contents/level_a/bcpgl_01_3.html')
+   
     st.write("## 全ての質問に回答しました")
     st.write("### 回答結果")
     df, score, dfg = agg_answers()
     st.write(f"御社の得点は {score} です。（20点満点中）")
     situation_check(score)
 
-    st.write(dfg[["ans_str"]].T)
+    show_chart(dfg)
     st.button("もう一度", on_click=reset_func)
 
     # for i, answer in enumerate(st.session_state["answers"], start=1):
@@ -90,6 +109,10 @@ def display_results():
 def show_quiz():
     quiz_num = st.session_state["current_num"] + 1
     quiz = df.loc[st.session_state["current_num"], "質問"]
+    st.header('BCP取り組み状況チェック', divider='rainbow')
+    st.write('中小企業庁: BCP取り組み状況チェックより作成')
+    st.write('https://www.chusho.meti.go.jp/bcp/contents/level_a/bcpgl_01_3.html')
+
     st.title(f"質問: {quiz_num}")
     st.write(f"{quiz}")
     st.button("はい", on_click=increment_session, args=(1,))
@@ -108,9 +131,3 @@ if st.session_state["current_num"] < len(df):
     show_quiz()
 else:
     display_results()
-
-
-# if st.session_state["current_num"] < len(df) - 1:
-#     st.write(f"質問 {quiz_num} / {len(df)}")
-# else:
-#     st.write("全ての質問に回答しました")
