@@ -57,19 +57,23 @@ def situation_check(score):
         return st.write(
             """緊急事態に遭遇すると、あなたの会社の事業は長期間停止し、
     廃業に追い込まれる恐れがあります。１からBCPの策定・運用に
-    取り組んでください。早急にできることからはじめてください
+    取り組んでください。まずは、中小企業庁の基本コースを読んでみましょう。
+    https://www.chusho.meti.go.jp/bcp/contents/level_a/bcpgl_01.html
     """
         )
     elif score < 16:
         return st.write(
             """緊急事態に備える意識は高いですが、まだまだ改善点があります。
-    実践的なBCPを策定し、平常時から運用を進めましょう
+    実践的なBCPを策定し、平常時から運用を進めましょう。
+    中小企業庁のBCP中級編を読んでみましょう。
+    https://www.chusho.meti.go.jp/bcp/contents/level_b/bcpgl_01.html
     """
         )
     else:
         return st.write(
             """BCPの考え方に則った取り組みが進んでいるようです。
-            BCPをチェックしてより強力なものとしましょう
+            中小企業庁のBCP中級編、上級編をチェックしてみましょう。
+            https://www.chusho.meti.go.jp/bcp/contents/level_b/bcpgl_01.html
         """
         )
 
@@ -90,8 +94,6 @@ def show_chart(df):
 
 def display_results():
     st.header('BCP取り組み状況チェック', divider='rainbow')
-    st.write('中小企業庁: BCP取り組み状況チェックより作成')
-    st.write('https://www.chusho.meti.go.jp/bcp/contents/level_a/bcpgl_01_3.html')
    
     st.write("## 全ての質問に回答しました")
     st.write("### 回答結果")
@@ -102,6 +104,10 @@ def display_results():
     show_chart(dfg)
     st.button("もう一度", on_click=reset_func)
 
+    st.divider()
+    st.write('このBCPチェックアプリは、中小企業庁: BCP取り組み状況チェックを基により作成しています')
+    st.write('https://www.chusho.meti.go.jp/bcp/contents/level_a/bcpgl_01_3.html')
+    st.write('作成: 合同会社長目 https://www.chomoku.info')
     # for i, answer in enumerate(st.session_state["answers"], start=1):
     #     st.write(f"質問 {i}: {answer}")
 
@@ -109,9 +115,8 @@ def display_results():
 def show_quiz():
     quiz_num = st.session_state["current_num"] + 1
     quiz = df.loc[st.session_state["current_num"], "質問"]
-    st.header('BCP取り組み状況チェック', divider='rainbow')
-    st.write('中小企業庁: BCP取り組み状況チェックより作成')
-    st.write('https://www.chusho.meti.go.jp/bcp/contents/level_a/bcpgl_01_3.html')
+    st.header('BCP取組状況チェック', divider='rainbow')
+
 
     st.title(f"質問: {quiz_num}")
     st.write(f"{quiz}")
@@ -123,9 +128,11 @@ def show_quiz():
 
     st.progress(progress)
     st.write(f"{quiz_num} / {len(df)}")
-    # st.button('もどる', on_click=modoru_func)
-    # st.button('すすむ', on_click=susumu_func)
 
+    st.divider()
+    st.write('このBCPチェックアプリは、中小企業庁: BCP取り組み状況チェックを基に作成しています')
+    st.write('https://www.chusho.meti.go.jp/bcp/contents/level_a/bcpgl_01_3.html')
+    st.write('作成: 合同会社長目 https://www.chomoku.info')
 
 if st.session_state["current_num"] < len(df):
     show_quiz()
