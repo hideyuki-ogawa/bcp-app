@@ -88,9 +88,10 @@ def show_chart(df):
                 'range': [0, 4],
                 'color': 'black'
             }
-        }
+        },
+        autosize=True,
     )
-    st.plotly_chart(fig)
+    st.plotly_chart(fig, use_container_width=True)
 
 def display_results():
     st.header('BCP取り組み状況チェック', divider='rainbow')
