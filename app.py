@@ -108,6 +108,7 @@ def display_results():
     st.divider()
     st.write('このBCPチェックアプリは、中小企業庁: BCP取り組み状況チェックを基に作成しています')
     st.write('https://www.chusho.meti.go.jp/bcp/contents/level_a/bcpgl_01_3.html')
+    st.write('回答されたデータは保存されません')
     st.write('作成: 合同会社長目 https://www.chomoku.info')
     # for i, answer in enumerate(st.session_state["answers"], start=1):
     #     st.write(f"質問 {i}: {answer}")
