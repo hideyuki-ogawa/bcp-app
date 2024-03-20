@@ -4,7 +4,13 @@ import plotly.express as px
 
 # ChatGPT: https://chat.openai.com/share/5d3a8f51-4edd-411a-9c62-e153c7f2d673
 
+
+st.set_page_config(
+    page_title="長目: BCP取組状況チェックアプリ", page_icon="img/chomoku-favicon.png"
+)
+
 df = pd.read_csv("./data/bcp_test.csv")
+
 if "current_num" not in st.session_state:
     st.session_state["current_num"] = 0
 
@@ -79,23 +85,18 @@ def situation_check(score):
 
 
 def show_chart(df):
-    fig = px.line_polar(df, r='ans', theta='cat', line_close=True)
-    fig.update_traces(fill='toself')
+    fig = px.line_polar(df, r="ans", theta="cat", line_close=True)
+    fig.update_traces(fill="toself")
     fig.update_layout(
-        polar={
-            'radialaxis': {
-                'visible': True,
-                'range': [0, 4],
-                'color': 'black'
-            }
-        },
+        polar={"radialaxis": {"visible": True, "range": [0, 4], "color": "black"}},
         autosize=True,
     )
     st.plotly_chart(fig, use_container_width=True)
 
+
 def display_results():
-    st.header('BCP取り組み状況チェック', divider='rainbow')
-   
+    st.header("BCP取り組み状況チェック", divider="rainbow")
+
     st.write("## 全ての質問に回答しました")
     st.write("### 回答結果")
     df, score, dfg = agg_answers()
@@ -106,10 +107,12 @@ def display_results():
     st.button("もう一度", on_click=reset_func)
 
     st.divider()
-    st.write('このBCPチェックアプリは、中小企業庁: BCP取り組み状況チェックを基に作成しています')
-    st.write('https://www.chusho.meti.go.jp/bcp/contents/level_a/bcpgl_01_3.html')
-    st.write('回答されたデータは保存されません')
-    st.write('作成: 合同会社長目 https://www.chomoku.info')
+    st.write(
+        "このBCPチェックアプリは、中小企業庁: BCP取り組み状況チェックを基に作成しています"
+    )
+    st.write("https://www.chusho.meti.go.jp/bcp/contents/level_a/bcpgl_01_3.html")
+    st.write("回答されたデータは保存されません")
+    st.write("作成: 合同会社長目 https://www.chomoku.info")
     # for i, answer in enumerate(st.session_state["answers"], start=1):
     #     st.write(f"質問 {i}: {answer}")
 
@@ -117,8 +120,7 @@ def display_results():
 def show_quiz():
     quiz_num = st.session_state["current_num"] + 1
     quiz = df.loc[st.session_state["current_num"], "質問"]
-    st.header('BCP取組状況チェック', divider='rainbow')
-
+    st.header("BCP取組状況チェック", divider="rainbow")
 
     st.title(f"質問: {quiz_num}")
     st.write(f"{quiz}")
@@ -132,9 +134,12 @@ def show_quiz():
     st.write(f"{quiz_num} / {len(df)}")
 
     st.divider()
-    st.write('このBCPチェックアプリは、中小企業庁: BCP取り組み状況チェックを基に作成しています')
-    st.write('https://www.chusho.meti.go.jp/bcp/contents/level_a/bcpgl_01_3.html')
-    st.write('作成: 合同会社長目 https://www.chomoku.info')
+    st.write(
+        "このBCPチェックアプリは、中小企業庁: BCP取り組み状況チェックを基に作成しています"
+    )
+    st.write("https://www.chusho.meti.go.jp/bcp/contents/level_a/bcpgl_01_3.html")
+    st.write("作成: 合同会社長目 https://www.chomoku.info")
+
 
 if st.session_state["current_num"] < len(df):
     show_quiz()
