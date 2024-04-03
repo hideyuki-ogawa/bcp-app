@@ -6,7 +6,7 @@ import plotly.express as px
 
 
 st.set_page_config(
-    page_title="長目: BCP取組状況チェックアプリ", page_icon="img/chomoku-favicon.png"
+    page_title="長目: BCPチェッカー", page_icon="img/chomoku-favicon.png"
 )
 
 df = pd.read_csv("./data/bcp_test.csv")
@@ -95,7 +95,7 @@ def show_chart(df):
 
 
 def display_results():
-    st.header("BCP取り組み状況チェック", divider="rainbow")
+    st.header("BCPチェッカー", divider="rainbow")
 
     st.write("## 全ての質問に回答しました")
     st.write("### 回答結果")
@@ -120,7 +120,7 @@ def display_results():
 def show_quiz():
     quiz_num = st.session_state["current_num"] + 1
     quiz = df.loc[st.session_state["current_num"], "質問"]
-    st.header("BCP取組状況チェック", divider="rainbow")
+    st.header("BCPチェッカー", divider="rainbow")
 
     st.title(f"質問: {quiz_num}")
     st.write(f"{quiz}")
