@@ -2,6 +2,8 @@ import streamlit as st
 import pandas as pd
 import plotly.express as px
 
+from datetime import datetime
+
 # ChatGPT: https://chat.openai.com/share/5d3a8f51-4edd-411a-9c62-e153c7f2d673
 
 
@@ -100,10 +102,18 @@ def display_results():
     st.write("## 全ての質問に回答しました")
     st.write("### 回答結果")
     df, score, dfg = agg_answers()
+    today_date = datetime.now().date()
+    st.write(f"#### {today_date}時点の")
     st.write(f"御社の得点は {score} です。（20点満点中）")
+
+    if score < 18:
+        st.write("BCP取り組みの改善を行い、またチャレンジしてください！")
+
     situation_check(score)
 
     show_chart(dfg)
+
+    st.write("**右上のケバブメニュー（３つの点）のPrintから内容をPDFで出力できます。**")
     st.button("もう一度", on_click=reset_func)
 
     st.divider()
