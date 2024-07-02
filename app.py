@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.express as px
+import time
 
 from datetime import datetime
 
@@ -20,10 +21,13 @@ if "answers" not in st.session_state:
     st.session_state["answers"] = {}
 
 
-def increment_session(answer):
-    st.session_state["answers"][st.session_state["current_num"]] = answer
-    if st.session_state["current_num"] < len(df):
-        st.session_state["current_num"] += 1
+def increment_session(answer=None):
+    if answer is None and st.session_state["current_num"] == 0:
+        st.session_state["current_num"] = 1
+    else:
+        st.session_state["answers"][st.session_state["current_num"]] = answer
+        if st.session_state["current_num"] <= len(df):
+            st.session_state["current_num"] += 1
 
 
 def modoru_func():
@@ -128,20 +132,22 @@ def display_results():
 
 
 def show_quiz():
-    quiz_num = st.session_state["current_num"] + 1
-    quiz = df.loc[st.session_state["current_num"], "質問"]
+
+    c_num = st.session_state["current_num"]
+    q_num = c_num - 1
+    quiz = df.loc[q_num, "質問"]
     st.header("BCPチェッカー", divider="rainbow")
 
-    st.title(f"質問: {quiz_num}")
+    st.title(f"質問: {c_num}")
     st.write(f"{quiz}")
     st.button("はい", on_click=increment_session, args=(1,))
     st.button("いいえ", on_click=increment_session, args=(0,))
     st.button("?", on_click=increment_session, args=(0,))
 
-    progress = (st.session_state["current_num"] + 1) / len(df)
+    progress = (st.session_state["current_num"]) / len(df)
 
     st.progress(progress)
-    st.write(f"{quiz_num} / {len(df)}")
+    st.write(f"{c_num} / {len(df)}")
 
     st.divider()
     st.write(
@@ -151,7 +157,39 @@ def show_quiz():
     st.write("作成: 合同会社長目 https://www.chomoku.info")
 
 
-if st.session_state["current_num"] < len(df):
+_BCP_TEXT = """
+BCPは「事業継続計画」の略で、企業が災害や事故などの予期せぬ事態に遭遇した際に、
+事業へのダメージを最小限に抑え、重要な業務を継続・復旧させるための計画です。
+
+具体的には、事前にリスクを洗い出し、対応策を準備しておくことで、緊急時でも冷静に対応し、
+事業を早期に復旧させることを目指します。BCPは企業の存続に関わる重要な取り組みであり、
+あらゆる企業にとって欠かせないものです。
+"""
+
+
+def stream_data():
+    for word in _BCP_TEXT:
+        yield word + " "
+        time.sleep(0.04)
+
+
+def show_title():
+    st.header("BCPってなんでしょう？", divider="rainbow")
+
+    st.write_stream(stream_data)
+    st.button(label="自社の状況をチェック", on_click=increment_session)
+
+    st.divider()
+    st.write(
+        "このBCPチェックアプリは、中小企業庁: BCP取り組み状況チェックを基に作成しています"
+    )
+    st.write("https://www.chusho.meti.go.jp/bcp/contents/level_a/bcpgl_01_3.html")
+    st.write("作成: 合同会社長目 https://www.chomoku.info")
+
+
+if st.session_state["current_num"] == 0:
+    show_title()
+elif st.session_state["current_num"] <= len(df):
     show_quiz()
 else:
     display_results()
