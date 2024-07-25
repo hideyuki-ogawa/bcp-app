@@ -118,7 +118,10 @@ def display_results():
     show_chart(dfg)
 
     st.write("**右上のケバブメニュー（３つの点）のPrintから内容をPDFで出力できます。**")
-    st.button("もう一度", on_click=reset_func)
+    st.write("環境変化が激しい時代に備えるため、BCPの策定をご検討の場合、長目までご相談ください。")
+    st.link_button('長目のサイトへ行く', 'https://www.chomoku.info')
+
+    st.button("もう一度アプリを使う", on_click=reset_func)
 
     st.divider()
     st.write(
@@ -166,7 +169,7 @@ BCPは「事業継続計画」の略で、企業が災害や事故などの予�
 あらゆる企業にとって欠かせないものです。
 
 BCPチェッカーは20の質問に答え、御社のBCPの取組状況をチェックできます。質問は中小企業庁
-のページを基にしています。
+のページを基に長目が作成しました。
 """
 
 
